@@ -2,10 +2,7 @@ package gui;
 
 
 import java.awt.*;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.util.ArrayList;
 
 public class KnotFileReaderWriter {
@@ -13,7 +10,7 @@ public class KnotFileReaderWriter {
     private static final String elementSeperator = "####";
 
     public static void saveFile(File fileToBeUsed) {
-        ArrayList<Point> verticies = GridGraphView.getVertices();
+        ArrayList<Point> vertices = GridGraphView.getVertices();
         ArrayList<Point> edgesStart = GridGraphView.getEdgesStart();
         ArrayList<Point> edgesEnd = GridGraphView.getEdgesEnd();
 
@@ -29,21 +26,18 @@ public class KnotFileReaderWriter {
 
         String output = "";
 
-        for (int i = 0; i < verticies.size(); i++) {
-            Point point = verticies.get(i);
-            output = output + elementSeperator + point.getX() + ","
-                    + point.getY();
+        for (Point vertex : vertices) {
+            output = output + elementSeperator + vertex.getX() + ","
+                    + vertex.getY();
         }
         output = output + sectionSeperator;
 
-        for (int i = 0; i < edgesStart.size(); i++) {
-            Point point = edgesStart.get(i);
-            output = output + elementSeperator + point.getX() + "," + point.getY();
+        for (Point edgeStart : edgesStart) {
+            output = output + elementSeperator + edgeStart.getX() + "," + edgeStart.getY();
         }
         output = output + sectionSeperator;
 
-        for (int i = 0; i < edgesEnd.size(); i++) {
-            Point point = edgesEnd.get(i);
+        for (Point point : edgesEnd) {
             output = output + elementSeperator + point.getX() + "," + point.getY();
         }
         output = output + sectionSeperator;
@@ -67,8 +61,21 @@ public class KnotFileReaderWriter {
                 + innerPaintTwo.getGreen() + ","
                 + innerPaintTwo.getBlue() + ","
                 + innerPaintTwo.getAlpha() + sectionSeperator;
+
+        output = output + backgroundPaintOne.getRed() + ","
+                + backgroundPaintOne.getGreen() + ","
+                + backgroundPaintOne.getBlue() + ","
+                + backgroundPaintOne.getAlpha() + sectionSeperator;
+
+        output = output + backgroundPaintTwo.getRed() + ","
+                + backgroundPaintTwo.getGreen() + ","
+                + backgroundPaintTwo.getBlue() + ","
+                + backgroundPaintTwo.getAlpha() + sectionSeperator;
+
+
         output = output + outlineThickness + sectionSeperator;
         output = output + innerThickness;
+
         try {
             FileWriter fileWriter = new FileWriter(fileToBeUsed);
             BufferedWriter buffWriter = new BufferedWriter(fileWriter);
@@ -81,6 +88,16 @@ public class KnotFileReaderWriter {
     }
 
     static void loadFile(File fileToBeUsed) {
+        try (RandomAccessFile input = new RandomAccessFile(fileToBeUsed, "r")) {
+            byte[] inputBytes = new byte[new Long(input.length()).intValue()];
+            input.read(inputBytes);
+            drawKnotGraphFromString(new String(inputBytes));
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+    }
+
+    static void drawKnotGraphFromString(String inputString)   {
         ArrayList<Point> vertices = new ArrayList<>();
         ArrayList<Point> edgesStart = new ArrayList<>();
         ArrayList<Point> edgesEnd = new ArrayList<>();
@@ -96,10 +113,6 @@ public class KnotFileReaderWriter {
         boolean setGenerateKnot = false;
 
         try {
-            RandomAccessFile input = new RandomAccessFile(fileToBeUsed, "r");
-            byte[] inputBytes = new byte[new Long(input.length()).intValue()];
-            input.read(inputBytes);
-            String inputString = new String(inputBytes);
             String[] sections = inputString.split(sectionSeperator);
             String[] verticesFromFile = sections[0].split(elementSeperator);
             for (String aVerticesFromFile : verticesFromFile) {
@@ -216,6 +229,7 @@ public class KnotFileReaderWriter {
             ButtonPanelColours.repaintView();
             GridGraphView.repaintView();
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
