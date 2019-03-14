@@ -2,7 +2,6 @@ package knot.generation;
 
 import gui.ButtonPanelKnotCreated;
 import gui.GridGraphView;
-import gui.KnotFileReaderWriter;
 import gui.MainWindow;
 
 import java.awt.*;
@@ -23,42 +22,50 @@ public class SampleKnotCreator {
     Color backgroundPaintTwo = new Color(255, 255, 255);
 
     public void createSampleKnot() {
-        Point upperLeftCorner = getStartingPoint();
+        int x, y;
+        Point upperLeftCorner;
 
-        for (int length = 1; length < 9; length++) {
-            for (int width = 1; width < 9; width++) {
-                GridGraphView gridGraphView = new GridGraphView();
-                GridGraphView.clearGraph();
-                //leave these constant for all graphs for now
-                GridGraphView.setInnerThickness(innerThickness);
-                GridGraphView.setOutlineThickness(outlineThickness);
-                GridGraphView.setBackgroundPaintOne(backgroundPaintOne);
-                GridGraphView.setBackgroundPaintTwo(backgroundPaintTwo);
-
-                GridGraphView.setOutlinePaintOne(new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
-                GridGraphView.setOutlinePaintTwo(new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
-                GridGraphView.setInnerPaintOne(new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
-                GridGraphView.setInnerPaintTwo(new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
-
-                Dimension dimension = new Dimension(length, width);
-                Rectangle rectangle = new Rectangle(upperLeftCorner, dimension);
-                generateGraph(gridGraphView, rectangle);
-            }
-        }
-    }
-
-    private Point getStartingPoint() {
-        int x = 60, y = 60;
-        for (int i = 1; i < 7; i++) { //max x start is 360
+        for (int i = 1; i < 8; i++) { //max x start is 360
             x = i * 60;
-            for (int j = 1; j < 7; j++) { //max y start is 360
+            for (int j = 1; j < 8; j++) { //max y start is 360
                 y = j * 60;
                 System.out.println("x = " + x + " y = " + y);
+                upperLeftCorner = new Point(x, y); //very upper, far-left corner of grid
+                initializeGrid(upperLeftCorner);
             }
         }
-        return new Point(60, 60); //very upper, far-left corner of grid
     }
 
+    private void initializeGrid(Point upperLeftCorner) {
+        int width = calculateRectangleWidth(upperLeftCorner);
+        int height = calculateRectangleHeight(upperLeftCorner);
+
+        System.out.println("width = " + width + " height = " + height);
+        GridGraphView gridGraphView = new GridGraphView();
+        GridGraphView.clearGraph();
+        //leave these constant for all graphs for now
+        GridGraphView.setInnerThickness(innerThickness);
+        GridGraphView.setOutlineThickness(outlineThickness);
+        GridGraphView.setBackgroundPaintOne(backgroundPaintOne);
+        GridGraphView.setBackgroundPaintTwo(backgroundPaintTwo);
+
+        GridGraphView.setOutlinePaintOne(new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
+        GridGraphView.setOutlinePaintTwo(new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
+        GridGraphView.setInnerPaintOne(new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
+        GridGraphView.setInnerPaintTwo(new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
+
+        Dimension dimension = new Dimension(width, height);
+        Rectangle rectangle = new Rectangle(upperLeftCorner, dimension);
+        generateGraph(gridGraphView, rectangle);
+    }
+
+    private int calculateRectangleWidth(Point upperLeftCorner) {
+        return ((480 - upperLeftCorner.x) / 60);
+    }
+
+    private int calculateRectangleHeight(Point upperLeftCorner) {
+        return ((480 - upperLeftCorner.y) / 60);
+    }
 
     //going to do rectangles to start with here
     private void generateGraph(GridGraphView gridGraphView, Rectangle placeToStart) {
@@ -90,9 +97,9 @@ public class SampleKnotCreator {
                 edgesStart.add(p);
             }
         }
-        assert(vertices.size() == width + 1);
-        assert(edgesStart.size() == width);
-        assert(edgesEnd.size() == width);
+        assert (vertices.size() == width + 1);
+        assert (edgesStart.size() == width);
+        assert (edgesEnd.size() == width);
 
         //place a vertex at each grid mark across height of vertical axis from starting point + width
         //to form the right edge
@@ -109,9 +116,9 @@ public class SampleKnotCreator {
                 edgesStart.add(p);
             }
         }
-        assert(vertices.size() == (width + 1) + height);
-        assert(edgesStart.size() == width + height);
-        assert(edgesEnd.size() == width + height);
+        assert (vertices.size() == (width + 1) + height);
+        assert (edgesStart.size() == width + height);
+        assert (edgesEnd.size() == width + height);
 
 
         //keep going clockwise, head west from lower right corner
@@ -162,7 +169,7 @@ public class SampleKnotCreator {
         }
 
         //finally finish with an edge end at the origin
-        Point p = new Point(placeToStart.x , placeToStart.y);
+        Point p = new Point(placeToStart.x, placeToStart.y);
         edgesEnd.add(p);
 
         System.out.println("building graph for height = " + height + " width = " + width);
@@ -193,6 +200,7 @@ public class SampleKnotCreator {
         SampleKnotCreator sampleKnotCreator = new SampleKnotCreator();
         MainWindow.createAndShowGUI();
         sampleKnotCreator.createSampleKnot();
+        System.exit(1);
     }
 
 }
