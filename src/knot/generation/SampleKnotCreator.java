@@ -23,8 +23,7 @@ public class SampleKnotCreator {
     Color backgroundPaintTwo = new Color(255, 255, 255);
 
     public void createSampleKnot() {
-        //todo keeping it simple for now
-        Point upperLeftCorner = new Point(60, 60);
+        Point upperLeftCorner = getStartingPoint();
 
         for (int length = 1; length < 9; length++) {
             for (int width = 1; width < 9; width++) {
@@ -46,6 +45,18 @@ public class SampleKnotCreator {
                 generateGraph(gridGraphView, rectangle);
             }
         }
+    }
+
+    private Point getStartingPoint() {
+        int x = 60, y = 60;
+        for (int i = 1; i < 7; i++) { //max x start is 360
+            x = i * 60;
+            for (int j = 1; j < 7; j++) { //max y start is 360
+                y = j * 60;
+                System.out.println("x = " + x + " y = " + y);
+            }
+        }
+        return new Point(60, 60); //very upper, far-left corner of grid
     }
 
 
