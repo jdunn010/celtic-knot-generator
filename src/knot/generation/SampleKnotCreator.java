@@ -31,16 +31,22 @@ public class SampleKnotCreator {
                 y = j * 60;
                 System.out.println("x = " + x + " y = " + y);
                 upperLeftCorner = new Point(x, y); //very upper, far-left corner of grid
-                initializeGrid(upperLeftCorner);
+                generateGraph(upperLeftCorner);
             }
         }
     }
 
-    private void initializeGrid(Point upperLeftCorner) {
+    private void generateGraph(Point upperLeftCorner) {
+        GridGraphView gridGraphView = initializeGrid(upperLeftCorner);
         int width = calculateRectangleWidth(upperLeftCorner);
         int height = calculateRectangleHeight(upperLeftCorner);
 
-        System.out.println("width = " + width + " height = " + height);
+        Dimension dimension = new Dimension(width, height);
+        Rectangle rectangle = new Rectangle(upperLeftCorner, dimension);
+        generateKnot(gridGraphView, rectangle);
+    }
+
+    private GridGraphView initializeGrid(Point upperLeftCorner) {
         GridGraphView gridGraphView = new GridGraphView();
         GridGraphView.clearGraph();
         //leave these constant for all graphs for now
@@ -54,9 +60,7 @@ public class SampleKnotCreator {
         GridGraphView.setInnerPaintOne(new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
         GridGraphView.setInnerPaintTwo(new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
 
-        Dimension dimension = new Dimension(width, height);
-        Rectangle rectangle = new Rectangle(upperLeftCorner, dimension);
-        generateGraph(gridGraphView, rectangle);
+        return gridGraphView;
     }
 
     private int calculateRectangleWidth(Point upperLeftCorner) {
@@ -68,7 +72,7 @@ public class SampleKnotCreator {
     }
 
     //going to do rectangles to start with here
-    private void generateGraph(GridGraphView gridGraphView, Rectangle placeToStart) {
+    private void generateKnot(GridGraphView gridGraphView, Rectangle placeToStart) {
         ArrayList<Point> vertices = new ArrayList<>();
         ArrayList<Point> edgesStart = new ArrayList<>();
         ArrayList<Point> edgesEnd = new ArrayList<>();
