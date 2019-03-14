@@ -16,23 +16,28 @@ import java.util.ArrayList;
 
 public class GridGraphView extends JPanel {
     private static final long serialVersionUID = 1;
+
     private static JPanel me;
-    private static final int MAGIC_NUMBER = 60;
-    private static final int VERTEX_SIZE = 10;
+
+    public static final int MAGIC_NUMBER = 60;
+    public static final int VERTEX_SIZE = 10;
+
     private static Point startPoint;
     private static Point endPoint;
     private static Point selected;
+
     private static Line2D.Double selectedEdge;
+
     private static final ArrayList<Point> vertices = new ArrayList<>();
     private static final ArrayList<Point> edgesStart = new ArrayList<>();
     private static final ArrayList<Point> edgesEnd = new ArrayList<>();
     private static final ArrayList<Point> edgesMidpoint = new ArrayList<>();
+
     private static boolean generatingKnot = false;
 
-
-    private static Color outlinePaintOne = new Color(255, 133, 0);
-    private static Color outlinePaintTwo = new Color(255, 133, 0);
-    private static Color innerPaintOne = new Color(255, 255, 204);
+    private static Color outlinePaintOne = new Color(17, 255, 122);
+    private static Color outlinePaintTwo = new Color(178, 86, 012);
+    private static Color innerPaintOne = new Color(178, 145, 25);
     private static Color innerPaintTwo = new Color(255, 255, 204);
     private static Color backgroundPaintOne = Color.WHITE;
     private static Color backgroundPaintTwo = Color.WHITE;
@@ -172,6 +177,7 @@ public class GridGraphView extends JPanel {
     }
 
     public static void savePicture(File file, String fileExtension) {
+        System.out.println("file = " + file.getAbsolutePath());
         try {
             BufferedImage bi = new BufferedImage(600, 600, BufferedImage.TYPE_INT_ARGB);
             Graphics2D g3 = bi.createGraphics();
@@ -183,8 +189,12 @@ public class GridGraphView extends JPanel {
                     backgroundPaintOne, 600, 600, backgroundPaintTwo, true);
             Generator.paintKnot(g3, outlinePaint, innerPaint, backgroundPaint,
                     outlineThickness, innerThickness);
-            ImageIO.write(bi, fileExtension, file);
+            if (!ImageIO.write(bi, fileExtension, file)) {
+                throw new IllegalStateException("failed to save image");
+            }
+            //System.out.println("backgroundPaint = " + backgroundPaint);
         } catch (IOException ignore) {
+            ignore.printStackTrace();
         }
     }
 

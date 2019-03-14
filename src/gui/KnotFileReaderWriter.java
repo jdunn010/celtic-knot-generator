@@ -5,9 +5,10 @@ import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 
+
 public class KnotFileReaderWriter {
-    private static final String sectionSeperator = "@@@@";
-    private static final String elementSeperator = "####";
+    public static final String sectionSeperator = "@@@@";
+    public static final String elementSeperator = "####";
 
     public static void saveFile(File fileToBeUsed) {
         ArrayList<Point> vertices = GridGraphView.getVertices();
@@ -203,31 +204,39 @@ public class KnotFileReaderWriter {
                     .intValue();
             innerThickness = new Integer(sections[10])
                     .intValue();
+
             GridGraphView.setVertices(vertices);
+
             GridGraphView.setEdgesStart(edgesStart);
             GridGraphView.setEdgesEnd(edgesEnd);
+
             GridGraphView.setOutlinePaintOne(outlinePaintOne);
             GridGraphView.setOutlinePaintTwo(outlinePaintTwo);
             GridGraphView.setInnerPaintOne(innerPaintOne);
             GridGraphView.setInnerPaintTwo(innerPaintTwo);
             GridGraphView.setBackgroundPaintOne(backgroundPaintOne);
             GridGraphView.setBackgroundPaintTwo(backgroundPaintTwo);
+
             GridGraphView.setOutlineThickness(outlineThickness);
             GridGraphView.setInnerThickness(innerThickness);
+
             GridGraphView.setGeneratingKnot(false);
+
             ButtonPanelColours.changePreviewPanelColour("outlineColourOneSample", "outlinePanel", outlinePaintOne);
             ButtonPanelColours.changePreviewPanelColour("outlineColourTwoSample", "outlinePanel", outlinePaintTwo);
             ButtonPanelColours.changePreviewPanelColour("innerColourOneSample", "innerPanel", innerPaintOne);
             ButtonPanelColours.changePreviewPanelColour("innerColourTwoSample", "innerPanel", innerPaintTwo);
             ButtonPanelColours.changePreviewPanelColour("backgroundColourOneSample", "backgroundPanel", backgroundPaintOne);
             ButtonPanelColours.changePreviewPanelColour("backgroundColourTwoSample", "backgroundPanel", backgroundPaintTwo);
-            ButtonPanelColours
-                    .setSliderValues(outlineThickness, innerThickness);
+            ButtonPanelColours.setSliderValues(outlineThickness, innerThickness);
+
             ButtonPanelGraphCreation.setEnabledForComponent("clearAll", setClearAll);
             ButtonPanelGraphCreation.setEnabledForComponent("saveGraph", setClearAll);
             ButtonPanelGraphCreation.setEnabledForComponent("generateKnot", setGenerateKnot);
+
             ButtonPanelColours.repaintView();
             GridGraphView.repaintView();
+
         } catch (Exception e) {
             e.printStackTrace();
         }

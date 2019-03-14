@@ -12,7 +12,7 @@ import java.awt.event.ComponentEvent;
 
 public class MainWindow {
 
-    private static void createAndShowGUI() {
+    public static void createAndShowGUI() {
         JFrame frame = new JFrame("Celtic Knot Generator");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         GridBagConstraints c = new GridBagConstraints();
